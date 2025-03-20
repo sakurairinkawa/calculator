@@ -5,12 +5,12 @@ import java.awt.*;
 import java.util.Hashtable;
 
 class Calculator extends JFrame {
-    public final JPanel contentPanel;
-    public JPanel calculatorPanel;
-    public JToggleButton longButton;
-    public JToggleButton shortButton;
-    public JTextField txt_result;
-    public JSlider leverageSlider;
+    public final JPanel contentPanel; // 内容面板
+    public JPanel calculatorPanel; // 主面板
+    public JToggleButton longButton; // 做多按钮
+    public JToggleButton shortButton; //做空按钮
+    public JTextField txt_result; // 倍数文本框
+    public JSlider leverageSlider; // 滑动条
     public JTextField openPriceField; //开仓价格文本框
     public JTextField closePriceField; //平仓价格文本框
     public JTextField quantityField; // 开仓数量文本框
@@ -19,7 +19,7 @@ class Calculator extends JFrame {
 
     public Calculator() {
         super("合约计算器"); // 设置窗口标题
-        contentPanel = new JPanel(new BorderLayout()); // 容器面板：NORTH多空切换按钮 CENTER功能面板
+        contentPanel = new JPanel(new BorderLayout()); // 内容面板：NORTH多空切换按钮 CENTER功能面板
         setupSwitchButtons(); // 切换按钮面板
         setupCalculatorPanel(); // 功能面板
         init(); // 调用初始化方法设置界面
@@ -193,9 +193,9 @@ class Calculator extends JFrame {
         gbc.gridy = 5; // 第六行
         gbc.weightx = 0.7; // 设置水平权重为70%
         quantityField.setPreferredSize(new Dimension(150, 25)); // 设置首选大小
-        pricePanel.add(quantityField, gbc); // 将文本框添加到面板中并应用约束
+        pricePanel.add(quantityField, gbc); // 将文本框添加到输入面板中并应用约束
 
-        leveragePanel.add(pricePanel, BorderLayout.SOUTH);//添加滑动条到主面板
+        leveragePanel.add(pricePanel, BorderLayout.SOUTH);//添加输入面板到主面板
         calculatorPanel.add(leveragePanel, BorderLayout.NORTH);// 添加杠杆面板到主面板
         contentPanel.add(calculatorPanel, BorderLayout.CENTER);// 添加面板到contentPanel CENTER
         add(contentPanel);// 将内容面板添加到JFrame
