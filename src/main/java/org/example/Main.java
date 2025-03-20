@@ -5,11 +5,12 @@ import java.awt.*;
 import java.util.Hashtable;
 
 class Calculator extends JFrame {
-    private JPanel contentPanel;
-    private JPanel calculatorPanel;
-    private JToggleButton longButton;
-    private JToggleButton shortButton;
-    private boolean isLongPosition = true; // 默认做多状态
+    public final JPanel contentPanel;
+    public JPanel calculatorPanel;
+    public JToggleButton longButton;
+    public JToggleButton shortButton;
+    public boolean isLongPosition = true; // 默认做多状态
+    public int value = 1;
 
     public Calculator() {
         super("合约计算器"); // 设置窗口标题
@@ -36,13 +37,13 @@ class Calculator extends JFrame {
         buttonGroup.add(shortButton);
 
         // 添加切换事件
-        longButton.addActionListener(e -> {
+        longButton.addActionListener(_ -> {
             if (longButton.isSelected()) {
                 isLongPosition = true;
             }
         });
 
-        shortButton.addActionListener(e -> {
+        shortButton.addActionListener(_ -> {
             if (shortButton.isSelected()) {
                 isLongPosition = false;
             }
@@ -79,6 +80,19 @@ class Calculator extends JFrame {
         plusButton.setPreferredSize(new Dimension(45, 30));
         textWithButtonsPanel.add(plusButton, BorderLayout.EAST);
 
+        //-按钮的监听
+        minusButton.addActionListener(_ -> {
+            this.value--;
+            txt_result.setText(value + "x");
+        });
+
+        //+按钮的监听
+        plusButton.addActionListener(_ -> {
+            this.value++;
+            txt_result.setText(value + "x");
+        });
+
+
         // 将按钮和文本框组合添加到显示面板
         leveragePanel.add(textWithButtonsPanel, BorderLayout.NORTH);
         leveragePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5)); // 设置边距
@@ -102,8 +116,8 @@ class Calculator extends JFrame {
         slider.setPaintLabels(true);     // 绘制刻度标签
 
         // 添加滑动条值变化的监听器，可以同步更新文本框
-        slider.addChangeListener(e -> {
-            int value = slider.getValue();
+        slider.addChangeListener(_ -> {
+            this.value = slider.getValue();
             txt_result.setText(value + "x");
         });
 
@@ -111,8 +125,6 @@ class Calculator extends JFrame {
         sliderPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5)); // 设置边距
         leveragePanel.add(sliderPanel, BorderLayout.CENTER);
 
-        // 添加杠杆面板到主面板
-        calculatorPanel.add(leveragePanel, BorderLayout.NORTH);
         // 第二部分：输入价格和数量的面板
         JPanel pricePanel = new JPanel(new GridBagLayout()); // 使用GridBagLayout布局管理器，可以精确控制组件位置和大小
         pricePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10)); // 设置面板边距
@@ -166,8 +178,11 @@ class Calculator extends JFrame {
         quantityField.setPreferredSize(new Dimension(150, 25)); // 设置首选大小
         pricePanel.add(quantityField, gbc); // 将文本框添加到面板中并应用约束
 
-// 添加价格和数量面板到主面板
-        calculatorPanel.add(pricePanel, BorderLayout.CENTER);
+        leveragePanel.add(pricePanel, BorderLayout.SOUTH);
+
+
+        // 添加杠杆面板到主面板
+        calculatorPanel.add(leveragePanel, BorderLayout.NORTH);
 
     }
     private void init() {
