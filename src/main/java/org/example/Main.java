@@ -329,8 +329,8 @@ class Calculator extends JFrame {
             }
 
             @Override
-            public void changedUpdate(DocumentEvent e) { // 当文本属性改变时调用（主要用于样式文档）
-                updateButtonColor(); // 更新按钮颜色
+            public void changedUpdate(DocumentEvent e) {
+
             }
 
             public void updateButtonColor() { // 私有方法，用于更新按钮颜色
@@ -358,40 +358,38 @@ class Calculator extends JFrame {
                 // 计算盈亏
                 double profitLoss;
                 if (isLongPosition) {
-                    // 做多：平仓价格 - 开仓价格
                     profitLoss = (closePrice - openPrice) * quantity;
                 } else {
-                    // 做空：开仓价格 - 平仓价格
                     profitLoss = (openPrice - closePrice) * quantity;
                 }
 
                 // 计算回报率
                 double returnRate = (margin != 0) ? (profitLoss / margin * 100) : 0;
 
-                // 显示结果，保留两位小数
+                // 显示结果
                 marginField.setText(String.format("%.2f", margin));
                 profitLossField.setText(String.format("%.2f", profitLoss));
                 returnRateField.setText(String.format("%.2f", returnRate));
 
                 // 根据盈亏设置颜色
                 if (profitLoss > 0) {
-                    profitLossField.setForeground(new Color(0, 150, 0)); // 盈利为绿色
+                    profitLossField.setForeground(new Color(0, 150, 0));
                 } else {
-                    profitLossField.setForeground(new Color(200, 0, 0)); // 亏损为红色
+                    profitLossField.setForeground(new Color(200, 0, 0));
                 }
 
                 // 根据回报率设置颜色
                 if (returnRate > 0) {
-                    returnRateField.setForeground(new Color(0, 150, 0)); // 正回报为绿色
+                    returnRateField.setForeground(new Color(0, 150, 0));
                 } else {
-                    returnRateField.setForeground(new Color(200, 0, 0)); // 负回报为红色
+                    returnRateField.setForeground(new Color(200, 0, 0));
                 }
         });
 
-// 将监听器添加到每个输入字段的文档上
-        openPriceField.getDocument().addDocumentListener(inputListener); // 监听开仓价格字段的变化
-        closePriceField.getDocument().addDocumentListener(inputListener); // 监听平仓价格字段的变化
-        quantityField.getDocument().addDocumentListener(inputListener); // 监听数量字段的变化
+        // 将监听器添加到每个输入字段的文档上
+        openPriceField.getDocument().addDocumentListener(inputListener); // 监听开仓价格变化
+        closePriceField.getDocument().addDocumentListener(inputListener); // 监听平仓价格变化
+        quantityField.getDocument().addDocumentListener(inputListener); // 监听数量变化
         buttonPanel.add(calculateButton); // 将按钮添加到按钮面板
         calculatorPanel.add(buttonPanel, BorderLayout.SOUTH);// 将按钮面板添加到主面板
 
