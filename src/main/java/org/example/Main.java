@@ -24,11 +24,11 @@ class Calculator extends JFrame {
 
     public Calculator() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         super("合约计算器"); // 设置窗口标题
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            UIManager.put("Button.background", Color.WHITE);
-            UIManager.put("ToggleButton.background", Color.WHITE);
-            UIManager.put("Button.opaque", Boolean.TRUE);
-            UIManager.put("ToggleButton.opaque", Boolean.TRUE);
+        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        UIManager.put("Button.background", Color.WHITE);
+        UIManager.put("ToggleButton.background", Color.WHITE);
+        UIManager.put("Button.opaque", Boolean.TRUE);
+        UIManager.put("ToggleButton.opaque", Boolean.TRUE);
         contentPanel = new JPanel(new BorderLayout()); // 容器面板：NORTH多空切换按钮 CENTER功能面板
         setupSwitchButtons(); // 切换按钮面板
         setupCalculatorPanel(); // 功能面板
@@ -310,13 +310,13 @@ class Calculator extends JFrame {
         // 将结果显示面板添加到计算器主面板的中央
         calculatorPanel.add(resultsPanel, BorderLayout.CENTER);
 
-// 添加一个位于底部的计算按钮，并改进其样式
+        // 添加一个位于底部的计算按钮，并改进其样式
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // 创建一个使用居中流式布局的面板
         JButton calculateButton = new JButton("计算"); // 创建一个标签为"计算"的按钮
         calculateButton.setPreferredSize(new Dimension(250, 45)); // 设置按钮尺寸为宽200像素，高35像素
         calculateButton.setBackground(new Color(161, 133, 0)); // 设置按钮背景为暗黄色（无有效输入时）
 
-// 为输入字段添加文档监听器，用于检查输入是否有效
+        // 为输入字段添加文档监听器，用于检查输入是否有效
         DocumentListener inputListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { // 当文本插入时调用
@@ -346,6 +346,48 @@ class Calculator extends JFrame {
             }
         };
 
+        // 添加计算按钮的点击事件
+        calculateButton.addActionListener(_ -> {
+                double openPrice = Double.parseDouble(openPriceField.getText());
+                double closePrice = Double.parseDouble(closePriceField.getText());
+                double quantity = Double.parseDouble(quantityField.getText());
+
+                // 计算保证金
+                double margin = openPrice * quantity / value;
+
+                // 计算盈亏
+                double profitLoss;
+                if (isLongPosition) {
+                    // 做多：平仓价格 - 开仓价格
+                    profitLoss = (closePrice - openPrice) * quantity;
+                } else {
+                    // 做空：开仓价格 - 平仓价格
+                    profitLoss = (openPrice - closePrice) * quantity;
+                }
+
+                // 计算回报率
+                double returnRate = (margin != 0) ? (profitLoss / margin * 100) : 0;
+
+                // 显示结果，保留两位小数
+                marginField.setText(String.format("%.2f", margin));
+                profitLossField.setText(String.format("%.2f", profitLoss));
+                returnRateField.setText(String.format("%.2f", returnRate));
+
+                // 根据盈亏设置颜色
+                if (profitLoss > 0) {
+                    profitLossField.setForeground(new Color(0, 150, 0)); // 盈利为绿色
+                } else {
+                    profitLossField.setForeground(new Color(200, 0, 0)); // 亏损为红色
+                }
+
+                // 根据回报率设置颜色
+                if (returnRate > 0) {
+                    returnRateField.setForeground(new Color(0, 150, 0)); // 正回报为绿色
+                } else {
+                    returnRateField.setForeground(new Color(200, 0, 0)); // 负回报为红色
+                }
+        });
+
 // 将监听器添加到每个输入字段的文档上
         openPriceField.getDocument().addDocumentListener(inputListener); // 监听开仓价格字段的变化
         closePriceField.getDocument().addDocumentListener(inputListener); // 监听平仓价格字段的变化
@@ -357,7 +399,6 @@ class Calculator extends JFrame {
         calculatorPanel.add(leveragePanel, BorderLayout.NORTH);// 添加杠杆面板到主面板
         contentPanel.add(calculatorPanel, BorderLayout.CENTER);// 添加面板到contentPanel CENTER
         add(contentPanel);// 将内容面板添加到JFrame
-
     }
 
     private void init() {
