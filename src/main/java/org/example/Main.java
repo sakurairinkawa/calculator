@@ -400,7 +400,7 @@ class Calculator extends JFrame {
     }
 
     private void init() {
-        setBounds(300, 300, 320, 600); // 设置窗口位置和大小：x=300, y=300, 宽=320, 高=600
+        setBounds(300, 300, 320, 600); // 设置窗口位置和大小 x=300, y=300, 宽=320, 高=600
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 关闭窗口时退出程序
         setVisible(true); // 窗口可见
     }
@@ -411,4 +411,3 @@ public class Main {
         new Calculator();
     }
 }
-
